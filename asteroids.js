@@ -8,6 +8,9 @@ const startupPlayEl = document.getElementById("startup-play");
 
 const SKIP_BOOT_KEY = "asteroids-skip-boot";
 
+const isTouchDevice = () =>
+  window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
 const CTA_SECTIONS = [
   { id: "projects", label: "Projects", href: "./projects.html" },
   { id: "art", label: "Art", href: "./art.html" },
@@ -48,6 +51,8 @@ const state = {
   shakeY: 0,
   shipRespawnLockMs: 0,
   lastShotAt: 0,
+  tilt: 0,
+  tiltOffset: 0,
 };
 
 const ship = {
@@ -272,6 +277,30 @@ function initAudio() {
   audio.thrustOsc = thrustOsc;
   audio.thrustLfoOsc = thrustLfoOsc;
   audio.thrustLfoGain = thrustLfoGain;
+}
+
+function handleTilt(event) {
+  const isLandscape =
+    (screen.orientation?.type ?? "").includes("landscape") ||
+    window.innerWidth > window.innerHeight;
+  state.tilt = isLandscape ? (event.beta ?? 0) : (event.gamma ?? 0);
+}
+
+async function requestMotionPermission() {
+  if (!isTouchDevice()) return;
+  if (typeof DeviceOrientationEvent !== "undefined" &&
+      typeof DeviceOrientationEvent.requestPermission === "function") {
+    try {
+      const result = await DeviceOrientationEvent.requestPermission();
+      if (result === "granted") {
+        window.addEventListener("deviceorientation", handleTilt);
+      }
+    } catch {
+      // Permission denied or unavailable — tilt simply won't work.
+    }
+  } else {
+    window.addEventListener("deviceorientation", handleTilt);
+  }
 }
 
 function playTone({
@@ -555,11 +584,39 @@ function disableCursorHide() {
   document.body.classList.remove("cursor-hidden");
 }
 
+function initTouchControls() {
+  const thrustBtn = document.getElementById("tc-thrust");
+  const fireBtn = document.getElementById("tc-fire");
+  if (!thrustBtn || !fireBtn) return;
+
+  function addTouchKey(btn, key) {
+    btn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      state.keys.add(key);
+      initAudio();
+    }, { passive: false });
+    btn.addEventListener("touchend", (e) => {
+      e.preventDefault();
+      state.keys.delete(key);
+    }, { passive: false });
+    btn.addEventListener("touchcancel", (e) => {
+      e.preventDefault();
+      state.keys.delete(key);
+    }, { passive: false });
+  }
+
+  addTouchKey(thrustBtn, "ArrowUp");
+  addTouchKey(fireBtn, "Space");
+}
+
 function finishStartupAndPlay() {
   if (!state.booting) return;
   if (startupScreenEl) {
     startupScreenEl.classList.add("hidden");
   }
+
+  state.tiltOffset = state.tilt;
+  requestMotionPermission();
 
   setTimeout(() => {
     document.body.classList.remove("booting");
@@ -567,7 +624,7 @@ function finishStartupAndPlay() {
     state.startupReady = false;
     updateStatusText();
     initAudio();
-    enableCursorHide();
+    if (!isTouchDevice()) enableCursorHide();
   }, 520);
 }
 
@@ -714,8 +771,17 @@ function updateShip() {
   ship.prevX = ship.x;
   ship.prevY = ship.y;
 
-  if (state.keys.has("ArrowLeft")) ship.rotation -= config.rotationSpeed;
-  if (state.keys.has("ArrowRight")) ship.rotation += config.rotationSpeed;
+  if (isTouchDevice()) {
+    const TILT_DEAD_ZONE = 8;
+    const TILT_MAX = 45;
+    const tilt = clamp(state.tilt - state.tiltOffset, -TILT_MAX, TILT_MAX);
+    if (Math.abs(tilt) > TILT_DEAD_ZONE) {
+      ship.rotation += config.rotationSpeed * (tilt / TILT_MAX);
+    }
+  } else {
+    if (state.keys.has("ArrowLeft")) ship.rotation -= config.rotationSpeed;
+    if (state.keys.has("ArrowRight")) ship.rotation += config.rotationSpeed;
+  }
   if (state.keys.has("ArrowUp")) {
     ship.vx += Math.cos(ship.rotation) * config.thrustPower;
     ship.vy += Math.sin(ship.rotation) * config.thrustPower;
@@ -1007,7 +1073,8 @@ function enterGameDirectly() {
   }
   initAudio();
   updateStatusText();
-  enableCursorHide();
+  if (!isTouchDevice()) enableCursorHide();
+  requestMotionPermission();
 }
 
 function boot() {
@@ -1022,6 +1089,7 @@ function boot() {
   if (startupPlayEl) {
     startupPlayEl.addEventListener("click", finishStartupAndPlay);
   }
+  initTouchControls();
   window.addEventListener("pageshow", () => {
     resetTransientGameplayState();
     updateStatusText();

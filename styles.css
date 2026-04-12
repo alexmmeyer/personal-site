@@ -86,6 +86,7 @@ body::after {
   height: 100%;
   display: block;
   filter: contrast(1.06) saturate(1.15) brightness(0.92);
+  touch-action: none;
 }
 
 .startup-screen {
@@ -399,5 +400,64 @@ body:not(.booting) .startup-play.is-visible {
     transform: scale(0.96, 0.001);
     filter: brightness(0.1);
     visibility: hidden;
+  }
+}
+
+/* Touch controls — hidden on desktop, shown on touch devices */
+
+.touch-controls {
+  display: none;
+}
+
+.startup-controls-touch {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .startup-controls-keyboard {
+    display: none;
+  }
+
+  .startup-controls-touch {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .touch-controls {
+    display: flex;
+    position: fixed;
+    bottom: max(2rem, env(safe-area-inset-bottom, 2rem));
+    left: 0;
+    right: 0;
+    padding: 0 2rem;
+    justify-content: space-between;
+    align-items: flex-end;
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  .tc-btn {
+    pointer-events: auto;
+    touch-action: none;
+    width: clamp(72px, 20vw, 96px);
+    height: clamp(72px, 20vw, 96px);
+    border: 2px solid rgba(177, 255, 149, 0.7);
+    background: rgba(9, 32, 11, 0.55);
+    color: #c8ffb1;
+    font-family: "Press Start 2P", "Courier New", monospace;
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 4px;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    transition: box-shadow 0.1s ease, background 0.1s ease;
+  }
+
+  .tc-btn:active {
+    background: rgba(140, 255, 100, 0.18);
+    box-shadow: 0 0 14px rgba(168, 255, 136, 0.5);
   }
 }
