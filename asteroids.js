@@ -6,6 +6,8 @@ const startupNameEl = document.getElementById("startup-name");
 const startupControlsEl = document.getElementById("startup-controls");
 const startupPlayEl = document.getElementById("startup-play");
 
+const SKIP_BOOT_KEY = "asteroids-skip-boot";
+
 const CTA_SECTIONS = [
   { id: "projects", label: "Projects", href: "./projects.html" },
   { id: "art", label: "Art", href: "./art.html" },
@@ -508,6 +510,7 @@ function scheduleNavigation(href, label) {
   setStatusMessage(`Warping to ${label}...`);
   state.navigationTimeoutId = setTimeout(() => {
     state.navigationTimeoutId = null;
+    try { sessionStorage.setItem(SKIP_BOOT_KEY, "1"); } catch {}
     window.location.href = href;
   }, 650);
 }
@@ -955,11 +958,36 @@ function handleKeyUp(event) {
   }
 }
 
+function shouldSkipBoot() {
+  try {
+    if (sessionStorage.getItem(SKIP_BOOT_KEY) === "1") {
+      sessionStorage.removeItem(SKIP_BOOT_KEY);
+      return true;
+    }
+  } catch {}
+  return false;
+}
+
+function enterGameDirectly() {
+  document.body.classList.remove("booting");
+  state.booting = false;
+  state.startupReady = false;
+  if (startupScreenEl) {
+    startupScreenEl.style.display = "none";
+  }
+  initAudio();
+  updateStatusText();
+}
+
 function boot() {
   resizeCanvas();
   seedStars();
   spawnInitialAsteroids();
-  startStartupSequence();
+  if (shouldSkipBoot()) {
+    enterGameDirectly();
+  } else {
+    startStartupSequence();
+  }
   if (startupPlayEl) {
     startupPlayEl.addEventListener("click", finishStartupAndPlay);
   }
