@@ -1,0 +1,378 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+:root {
+  color-scheme: dark;
+  --bg: #020703;
+  --line: #8cff73;
+  --line-soft: rgba(140, 255, 115, 0.38);
+  --accent: #d1ff7d;
+  --text: #e7ffd4;
+  --panel-bg: rgba(6, 14, 7, 0.42);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+  font-family: "Trebuchet MS", "Verdana", sans-serif;
+  color: var(--text);
+  background: radial-gradient(circle at 50% 42%, #11340f 0%, var(--bg) 64%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0.2;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(188, 255, 165, 0.08) 0,
+    rgba(188, 255, 165, 0.08) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+.space-stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+#game {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: contrast(1.03) saturate(1.1);
+}
+
+.overlay {
+  position: absolute;
+  border: 1px solid var(--line-soft);
+  background: var(--panel-bg);
+  backdrop-filter: blur(8px) saturate(1.06);
+  -webkit-backdrop-filter: blur(8px) saturate(1.06);
+  box-shadow: 0 0 26px rgba(95, 255, 102, 0.2);
+  border-radius: 14px;
+  z-index: 5;
+}
+
+.controls-card {
+  top: clamp(16px, 3vw, 28px);
+  left: clamp(16px, 3vw, 28px);
+  max-width: min(380px, calc(100vw - 30px));
+  padding: 1rem 1.1rem;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.controls-card h1 {
+  margin: 0;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  color: var(--accent);
+  text-shadow: 0 0 10px rgba(145, 255, 120, 0.4);
+}
+
+.subhead {
+  margin: 0.45rem 0 0.8rem;
+  font-size: 0.96rem;
+  line-height: 1.35;
+}
+
+.controls-card ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: 0.48rem 0.85rem;
+}
+
+.controls-card li {
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+}
+
+.controls-card span {
+  color: var(--accent);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-right: 0.2rem;
+}
+
+.status-card {
+  left: 50%;
+  bottom: clamp(14px, 2.2vw, 24px);
+  transform: translateX(-50%);
+  padding: 0.55rem 0.95rem;
+  font-size: 0.92rem;
+  pointer-events: none;
+  max-width: min(90vw, 720px);
+  transition: opacity 0.5s ease;
+}
+
+.status-card p {
+  margin: 0;
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+
+body.booting .controls-card,
+body.booting .status-card {
+  opacity: 0;
+}
+
+.startup-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at center, #07240a 0%, #010301 72%);
+  overflow: hidden;
+}
+
+.startup-screen::before,
+.startup-screen::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  pointer-events: none;
+}
+
+.startup-screen::before {
+  background-image: repeating-radial-gradient(
+    circle at center,
+    rgba(146, 255, 126, 0.06) 0 2px,
+    transparent 2px 5px
+  );
+  mix-blend-mode: screen;
+  animation: noiseDrift 0.22s steps(3) infinite;
+}
+
+.startup-screen::after {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(190, 255, 163, 0.1) 0,
+    rgba(190, 255, 163, 0.1) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: 0.42;
+}
+
+.startup-core {
+  position: relative;
+  text-align: center;
+  color: #acff95;
+  padding: 2rem 2.4rem;
+  min-width: min(92vw, 760px);
+  border: 2px solid rgba(151, 255, 131, 0.48);
+  background: rgba(5, 23, 7, 0.34);
+  box-shadow: 0 0 36px rgba(127, 255, 108, 0.25);
+  animation: powerOn 1.15s ease-out both, crtShake 0.09s steps(2) 8;
+}
+
+.startup-kicker,
+.startup-subtitle {
+  font-family: "Press Start 2P", "Courier New", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+}
+
+.startup-kicker {
+  margin: 0 0 1.1rem;
+  font-size: clamp(0.42rem, 1.1vw, 0.62rem);
+  opacity: 0.75;
+}
+
+.startup-title {
+  margin: 0;
+  font-family: "Press Start 2P", "Courier New", monospace;
+  font-size: clamp(1.18rem, 7vw, 4.6rem);
+  line-height: 1.1;
+  color: #95ff80;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  text-shadow:
+    0 0 6px rgba(149, 255, 128, 0.95),
+    2px 0 0 rgba(145, 255, 130, 0.32),
+    -2px 0 0 rgba(145, 255, 130, 0.2);
+  animation: titleFlicker 0.12s steps(2) infinite;
+}
+
+.startup-step {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.32s ease, transform 0.32s ease;
+  pointer-events: none;
+}
+
+.startup-step.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.startup-controls-list {
+  list-style: none;
+  margin: 0.2rem auto 0;
+  padding: 0;
+  max-width: 560px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(160px, 1fr));
+  gap: 0.62rem 1rem;
+  font-family: "Press Start 2P", "Courier New", monospace;
+  font-size: clamp(0.36rem, 0.95vw, 0.52rem);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.startup-controls-list span {
+  color: #deff89;
+}
+
+.startup-subtitle {
+  margin: 1rem 0 0.8rem;
+  font-size: clamp(0.38rem, 0.95vw, 0.56rem);
+  opacity: 0.72;
+}
+
+.startup-play {
+  margin-top: 1.5rem;
+  border: 2px solid rgba(177, 255, 149, 0.7);
+  background: rgba(9, 32, 11, 0.55);
+  color: #c8ffb1;
+  font-family: "Press Start 2P", "Courier New", monospace;
+  font-size: clamp(0.52rem, 1.2vw, 0.72rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.25rem 0.65rem;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 0.28s ease, transform 0.28s ease, box-shadow 0.2s ease;
+}
+
+.startup-play.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.startup-play:hover,
+.startup-play:focus-visible {
+  outline: none;
+  box-shadow: 0 0 14px rgba(168, 255, 136, 0.5);
+}
+
+.startup-play:disabled {
+  cursor: default;
+}
+
+.startup-screen.hidden {
+  animation: screenOff 0.52s ease-in forwards;
+}
+
+@keyframes powerOn {
+  0% {
+    opacity: 0;
+    transform: scale(1.1, 0.01);
+    filter: brightness(4) blur(2px);
+  }
+  22% {
+    opacity: 1;
+    transform: scale(1.1, 0.01);
+    filter: brightness(4) blur(1px);
+  }
+  58% {
+    transform: scale(1, 1.08);
+    filter: brightness(1.55) blur(0.2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1, 1);
+    filter: brightness(1) blur(0);
+  }
+}
+
+@keyframes crtShake {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(0.8px, -0.4px);
+  }
+  50% {
+    transform: translate(-0.9px, 0.7px);
+  }
+  75% {
+    transform: translate(0.6px, -0.6px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes noiseDrift {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.26;
+  }
+  50% {
+    transform: translate(-2%, 1.2%) scale(1.01);
+    opacity: 0.18;
+  }
+  100% {
+    transform: translate(1.5%, -1.1%) scale(0.99);
+    opacity: 0.24;
+  }
+}
+
+@keyframes titleFlicker {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  35% {
+    opacity: 0.85;
+    transform: translate(0.6px, -0.2px);
+  }
+  70% {
+    opacity: 0.94;
+    transform: translate(-0.45px, 0.3px);
+  }
+}
+
+@keyframes screenOff {
+  0% {
+    opacity: 1;
+    transform: scale(1, 1);
+    filter: brightness(1);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1.05, 0.02);
+    filter: brightness(3);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.96, 0.001);
+    filter: brightness(0.1);
+    visibility: hidden;
+  }
+}
