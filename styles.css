@@ -409,7 +409,7 @@ body:not(.booting) .startup-play.is-visible {
   display: none;
 }
 
-.startup-controls-touch {
+.startup-tilt-hint {
   display: none;
 }
 
@@ -418,9 +418,23 @@ body:not(.booting) .startup-play.is-visible {
     display: none;
   }
 
-  .startup-controls-touch {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  #startup-controls .startup-subtitle {
+    display: none;
+  }
+
+  .startup-tilt-hint {
+    display: block;
+    font-family: "Press Start 2P", "Courier New", monospace;
+    font-size: clamp(0.55rem, 3vw, 0.72rem);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #f2e76f;
+    margin: 0.5rem 0 0;
+    text-shadow: 0 0 4px rgba(242, 231, 111, 0.35);
+  }
+
+  body.booting .touch-controls {
+    display: none;
   }
 
   .touch-controls {
@@ -445,7 +459,7 @@ body:not(.booting) .startup-play.is-visible {
     background: rgba(9, 32, 11, 0.55);
     color: #c8ffb1;
     font-family: "Press Start 2P", "Courier New", monospace;
-    font-size: clamp(1.2rem, 5vw, 1.8rem);
+    font-size: clamp(0.45rem, 1.8vw, 0.62rem);
     display: flex;
     align-items: center;
     justify-content: center;
