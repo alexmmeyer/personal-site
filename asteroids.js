@@ -6,6 +6,8 @@ const startupNameEl = document.getElementById("startup-name");
 const startupControlsEl = document.getElementById("startup-controls");
 const startupPlayEl = document.getElementById("startup-play");
 
+const SKIP_STARTUP_AFTER_CTA_KEY = "personal-site-asteroids-skip-startup";
+
 const CTA_SECTIONS = [
   { id: "projects", label: "Projects", href: "./projects.html" },
   { id: "art", label: "Art", href: "./art.html" },
@@ -15,7 +17,7 @@ const CTA_SECTIONS = [
 ];
 
 const config = {
-  rotationSpeed: 0.065,
+  rotationSpeed: 0.048,
   thrustPower: 0.16,
   drag: 0.992,
   bulletSpeed: 9.4,
@@ -507,6 +509,11 @@ function scheduleNavigation(href, label) {
   setStatusMessage(`Warping to ${label}...`);
   state.navigationTimeoutId = setTimeout(() => {
     state.navigationTimeoutId = null;
+    try {
+      sessionStorage.setItem(SKIP_STARTUP_AFTER_CTA_KEY, "1");
+    } catch {
+      // ignore (private mode, etc.)
+    }
     window.location.href = href;
   }, 650);
 }
@@ -535,6 +542,30 @@ function finishStartupAndPlay() {
     updateStatusText();
     initAudio();
   }, 520);
+}
+
+function consumeSkipStartupIntent() {
+  try {
+    if (sessionStorage.getItem(SKIP_STARTUP_AFTER_CTA_KEY) === "1") {
+      sessionStorage.removeItem(SKIP_STARTUP_AFTER_CTA_KEY);
+      return true;
+    }
+  } catch {
+    // ignore
+  }
+  return false;
+}
+
+function enterGameWithoutStartup() {
+  document.body.classList.remove("booting");
+  state.booting = false;
+  state.startupReady = false;
+  if (startupScreenEl) {
+    startupScreenEl.classList.add("startup-dismissed-instant");
+    startupScreenEl.setAttribute("aria-hidden", "true");
+  }
+  updateStatusText();
+  initAudio();
 }
 
 function startStartupSequence() {
@@ -938,7 +969,11 @@ function boot() {
   resizeCanvas();
   seedStars();
   spawnInitialAsteroids();
-  startStartupSequence();
+  if (consumeSkipStartupIntent()) {
+    enterGameWithoutStartup();
+  } else {
+    startStartupSequence();
+  }
   if (startupPlayEl) {
     startupPlayEl.addEventListener("click", finishStartupAndPlay);
   }
