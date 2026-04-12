@@ -151,8 +151,8 @@ body::before {
 }
 
 #startup-name.is-visible {
-  animation: nameSlideDown 1.62s linear forwards,
-    titleFlicker 0.12s steps(2) infinite 1.62s;
+  animation: nameSlideDown 1.5s cubic-bezier(0.18, 0.82, 0.15, 1) forwards,
+    titleFlicker 0.12s steps(2) infinite 1.5s;
 }
 
 #startup-controls {
@@ -160,7 +160,8 @@ body::before {
 }
 
 #startup-controls.is-visible {
-  animation: controlsSlideUp 1.05s linear 1.15s forwards;
+  animation: controlsSlideUp 0.95s cubic-bezier(0.18, 0.82, 0.15, 1) 1.15s
+    forwards;
 }
 
 .startup-controls-list {
@@ -228,7 +229,7 @@ body::before {
 }
 
 body.booting .startup-play.is-visible {
-  animation: playFadeIn 0.85s ease 2.35s forwards;
+  animation: playFadeIn 0.85s ease 2.05s forwards;
   pointer-events: auto;
 }
 
@@ -249,13 +250,6 @@ body:not(.booting) .startup-play.is-visible {
 
 .startup-screen.hidden {
   animation: screenOff 0.52s ease-in forwards;
-}
-
-/* Skip startup when returning from a CTA page (no screen-off animation). */
-.startup-screen.startup-dismissed-instant {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
 }
 
 @keyframes powerOn {
@@ -334,6 +328,10 @@ body:not(.booting) .startup-play.is-visible {
     opacity: 0;
     transform: translateY(-120vh);
   }
+  70% {
+    opacity: 1;
+    transform: translateY(4px);
+  }
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -344,6 +342,10 @@ body:not(.booting) .startup-play.is-visible {
   0% {
     opacity: 0;
     transform: translateY(110vh);
+  }
+  48% {
+    opacity: 1;
+    transform: translateY(-3px);
   }
   100% {
     opacity: 1;
