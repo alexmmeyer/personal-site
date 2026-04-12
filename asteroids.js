@@ -70,6 +70,12 @@ const audio = {
   thrustLfoGain: null,
 };
 
+function setStatusMessage(message) {
+  if (statusEl) {
+    statusEl.textContent = message;
+  }
+}
+
 function random(min, max) {
   return min + Math.random() * (max - min);
 }
@@ -498,7 +504,7 @@ function spawnExplosion(x, y, intensity = 1) {
 function scheduleNavigation(href, label) {
   if (state.navigating) return;
   state.navigating = true;
-  statusEl.textContent = `Warping to ${label}...`;
+  setStatusMessage(`Warping to ${label}...`);
   state.navigationTimeoutId = setTimeout(() => {
     state.navigationTimeoutId = null;
     window.location.href = href;
@@ -538,34 +544,29 @@ function startStartupSequence() {
     return;
   }
 
-  statusEl.textContent = "Booting console...";
+  setStatusMessage("Booting console...");
 
   if (startupNameEl) {
     startupNameEl.classList.add("is-visible");
   }
-  if (startupControlsEl) {
-    startupControlsEl.classList.remove("is-visible");
-  }
   if (startupPlayEl) {
-    startupPlayEl.classList.remove("is-visible");
     startupPlayEl.disabled = true;
   }
 
   setTimeout(() => {
-    if (startupControlsEl) {
-      startupControlsEl.classList.add("is-visible");
-    }
-  }, 1150);
-
-  setTimeout(() => {
     if (startupPlayEl) {
       startupPlayEl.disabled = false;
-      startupPlayEl.classList.add("is-visible");
-      startupPlayEl.focus();
+      if (typeof startupPlayEl.focus === "function") {
+        try {
+          startupPlayEl.focus({ preventScroll: true });
+        } catch {
+          startupPlayEl.focus();
+        }
+      }
     }
     state.startupReady = true;
-    statusEl.textContent = "Press Play to start";
-  }, 2050);
+    setStatusMessage("Press Play to start");
+  }, 4600);
 }
 
 function bounceShipOffAsteroid(asteroid) {
@@ -866,9 +867,7 @@ function drawFlash() {
 }
 
 function updateStatusText() {
-  if (state.navigating || state.booting) return;
-  const ctaCount = state.asteroids.filter((a) => a.alive && a.isCta).length;
-  statusEl.textContent = `CTA asteroids remaining: ${ctaCount} | Break rocks and shoot labels to navigate`;
+  // Intentionally blank: game HUD instructions are hidden.
 }
 
 function drawFrame(now) {

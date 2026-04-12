@@ -58,82 +58,6 @@ body::before {
   filter: contrast(1.03) saturate(1.1);
 }
 
-.overlay {
-  position: absolute;
-  border: 1px solid var(--line-soft);
-  background: var(--panel-bg);
-  backdrop-filter: blur(8px) saturate(1.06);
-  -webkit-backdrop-filter: blur(8px) saturate(1.06);
-  box-shadow: 0 0 26px rgba(95, 255, 102, 0.2);
-  border-radius: 14px;
-  z-index: 5;
-}
-
-.controls-card {
-  top: clamp(16px, 3vw, 28px);
-  left: clamp(16px, 3vw, 28px);
-  max-width: min(380px, calc(100vw - 30px));
-  padding: 1rem 1.1rem;
-  pointer-events: none;
-  transition: opacity 0.5s ease;
-}
-
-.controls-card h1 {
-  margin: 0;
-  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-  color: var(--accent);
-  text-shadow: 0 0 10px rgba(145, 255, 120, 0.4);
-}
-
-.subhead {
-  margin: 0.45rem 0 0.8rem;
-  font-size: 0.96rem;
-  line-height: 1.35;
-}
-
-.controls-card ul {
-  margin: 0;
-  padding-left: 0;
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(120px, 1fr));
-  gap: 0.48rem 0.85rem;
-}
-
-.controls-card li {
-  font-size: 0.88rem;
-  letter-spacing: 0.02em;
-}
-
-.controls-card span {
-  color: var(--accent);
-  text-transform: uppercase;
-  font-weight: 700;
-  margin-right: 0.2rem;
-}
-
-.status-card {
-  left: 50%;
-  bottom: clamp(14px, 2.2vw, 24px);
-  transform: translateX(-50%);
-  padding: 0.55rem 0.95rem;
-  font-size: 0.92rem;
-  pointer-events: none;
-  max-width: min(90vw, 720px);
-  transition: opacity 0.5s ease;
-}
-
-.status-card p {
-  margin: 0;
-  text-align: center;
-  letter-spacing: 0.01em;
-}
-
-body.booting .controls-card,
-body.booting .status-card {
-  opacity: 0;
-}
-
 .startup-screen {
   position: absolute;
   inset: 0;
@@ -175,27 +99,23 @@ body.booting .status-card {
 
 .startup-core {
   position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   color: #acff95;
-  padding: 2rem 2.4rem;
-  min-width: min(92vw, 760px);
-  border: 2px solid rgba(151, 255, 131, 0.48);
-  background: rgba(5, 23, 7, 0.34);
-  box-shadow: 0 0 36px rgba(127, 255, 108, 0.25);
+  padding: 1.5rem;
+  max-width: 100vw;
   animation: powerOn 1.15s ease-out both, crtShake 0.09s steps(2) 8;
 }
 
-.startup-kicker,
 .startup-subtitle {
   font-family: "Press Start 2P", "Courier New", monospace;
   text-transform: uppercase;
   letter-spacing: 0.11em;
-}
-
-.startup-kicker {
-  margin: 0 0 1.1rem;
-  font-size: clamp(0.42rem, 1.1vw, 0.62rem);
-  opacity: 0.75;
 }
 
 .startup-title {
@@ -215,7 +135,7 @@ body.booting .status-card {
 
 .startup-step {
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(12px);
   transition: opacity 0.32s ease, transform 0.32s ease;
   pointer-events: none;
 }
@@ -226,11 +146,29 @@ body.booting .status-card {
   pointer-events: auto;
 }
 
+#startup-name {
+  transform: translateY(-120vh);
+}
+
+#startup-name.is-visible {
+  animation: nameSlideDown 2.4s cubic-bezier(0.18, 0.82, 0.15, 1) forwards,
+    titleFlicker 0.12s steps(2) infinite 2.4s;
+}
+
+#startup-controls {
+  transform: translateY(115vh);
+}
+
+#startup-controls.is-visible {
+  animation: controlsSlideUp 2s cubic-bezier(0.18, 0.82, 0.15, 1) 2.6s forwards;
+}
+
 .startup-controls-list {
   list-style: none;
   margin: 0.2rem auto 0;
   padding: 0;
   max-width: 560px;
+  width: min(92vw, 560px);
   display: grid;
   grid-template-columns: repeat(2, minmax(160px, 1fr));
   gap: 0.62rem 1rem;
@@ -262,14 +200,23 @@ body.booting .status-card {
   padding: 0.75rem 1.25rem 0.65rem;
   cursor: pointer;
   opacity: 0;
-  transform: translateY(8px);
+  transform: none;
   pointer-events: none;
-  transition: opacity 0.28s ease, transform 0.28s ease, box-shadow 0.2s ease;
+  transition: opacity 0.9s ease, box-shadow 0.2s ease;
 }
 
 .startup-play.is-visible {
+  opacity: 0;
+  pointer-events: none;
+}
+
+body.booting .startup-play.is-visible {
+  animation: playFadeIn 1.3s ease 4.6s forwards;
+  pointer-events: auto;
+}
+
+body:not(.booting) .startup-play.is-visible {
   opacity: 1;
-  transform: translateY(0);
   pointer-events: auto;
 }
 
@@ -355,6 +302,45 @@ body.booting .status-card {
   70% {
     opacity: 0.94;
     transform: translate(-0.45px, 0.3px);
+  }
+}
+
+@keyframes nameSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-120vh);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes controlsSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(110vh);
+  }
+  72% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes playFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
 

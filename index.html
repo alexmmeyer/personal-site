@@ -12,11 +12,10 @@
 
       <section class="startup-screen" id="startup-screen" aria-hidden="true">
         <div class="startup-core">
-          <p class="startup-kicker">Cartridge Boot Sequence</p>
           <h2 class="startup-title startup-step is-visible" id="startup-name">
             Alex Meyer
           </h2>
-          <div class="startup-step" id="startup-controls">
+          <div class="startup-step is-visible" id="startup-controls">
             <p class="startup-subtitle">Controls</p>
             <ul class="startup-controls-list">
               <li><span>Up</span> Thrust</li>
@@ -25,28 +24,17 @@
               <li><span>Space</span> Fire</li>
             </ul>
           </div>
-          <button class="startup-play" id="startup-play" type="button" disabled>
+          <button
+            class="startup-play is-visible"
+            id="startup-play"
+            type="button"
+            disabled
+          >
             Play
           </button>
         </div>
       </section>
 
-      <section class="overlay controls-card" aria-live="polite">
-        <h1>Alex Meyer</h1>
-        <p class="subhead">
-          Shoot a labeled asteroid to warp directly into that section.
-        </p>
-        <ul>
-          <li><span>Up</span> thrust</li>
-          <li><span>Left</span> rotate CCW</li>
-          <li><span>Right</span> rotate CW</li>
-          <li><span>Space</span> fire</li>
-        </ul>
-      </section>
-
-      <section class="overlay status-card">
-        <p id="status">Target a labeled asteroid to navigate.</p>
-      </section>
     </main>
 
     <script src="./asteroids.js"></script>
