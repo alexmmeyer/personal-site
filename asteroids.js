@@ -35,6 +35,7 @@ const state = {
   particles: [],
   keys: new Set(),
   previousFrame: performance.now(),
+  accumulatorMs: 0,
   navigating: false,
   booting: true,
   startupReady: false,
@@ -371,9 +372,9 @@ function updateThrustAudio() {
   audio.thrustOsc.frequency.setTargetAtTime(thrusting ? 76 : 60, t, 0.045);
 }
 
-function drawStars(frameScale = 1) {
+function drawStars() {
   state.stars.forEach((star) => {
-    star.alpha += star.pulse * frameScale;
+    star.alpha += star.pulse;
     if (star.alpha > 0.95 || star.alpha < 0.1) {
       star.pulse *= -1;
     }
@@ -676,44 +677,43 @@ function shoot(now) {
   playShotSfx();
 }
 
-function updateShip(frameScale = 1) {
+function updateShip() {
   ship.prevX = ship.x;
   ship.prevY = ship.y;
 
-  if (state.keys.has("ArrowLeft")) ship.rotation -= config.rotationSpeed * frameScale;
-  if (state.keys.has("ArrowRight")) ship.rotation += config.rotationSpeed * frameScale;
+  if (state.keys.has("ArrowLeft")) ship.rotation -= config.rotationSpeed;
+  if (state.keys.has("ArrowRight")) ship.rotation += config.rotationSpeed;
   if (state.keys.has("ArrowUp")) {
-    ship.vx += Math.cos(ship.rotation) * config.thrustPower * frameScale;
-    ship.vy += Math.sin(ship.rotation) * config.thrustPower * frameScale;
+    ship.vx += Math.cos(ship.rotation) * config.thrustPower;
+    ship.vy += Math.sin(ship.rotation) * config.thrustPower;
   }
 
-  const dragScale = Math.pow(config.drag, frameScale);
-  ship.vx *= dragScale;
-  ship.vy *= dragScale;
-  ship.x += ship.vx * frameScale;
-  ship.y += ship.vy * frameScale;
+  ship.vx *= config.drag;
+  ship.vy *= config.drag;
+  ship.x += ship.vx;
+  ship.y += ship.vy;
   wrapPosition(ship);
 }
 
-function updateAsteroids(frameScale = 1) {
+function updateAsteroids() {
   state.asteroids.forEach((asteroid) => {
     if (!asteroid.alive) return;
     asteroid.prevX = asteroid.x;
     asteroid.prevY = asteroid.y;
-    asteroid.x += asteroid.vx * frameScale;
-    asteroid.y += asteroid.vy * frameScale;
-    asteroid.rotation += asteroid.spin * frameScale;
+    asteroid.x += asteroid.vx;
+    asteroid.y += asteroid.vy;
+    asteroid.rotation += asteroid.spin;
     wrapPosition(asteroid);
   });
 }
 
-function updateBullets(now, frameScale = 1) {
+function updateBullets(now) {
   for (let i = state.bullets.length - 1; i >= 0; i -= 1) {
     const bullet = state.bullets[i];
     bullet.prevX = bullet.x;
     bullet.prevY = bullet.y;
-    bullet.x += bullet.vx * frameScale;
-    bullet.y += bullet.vy * frameScale;
+    bullet.x += bullet.vx;
+    bullet.y += bullet.vy;
 
     const offscreen =
       bullet.x < -bullet.radius ||
@@ -727,14 +727,13 @@ function updateBullets(now, frameScale = 1) {
   }
 }
 
-function updateParticles(dtSeconds, frameScale = 1) {
+function updateParticles(dtSeconds) {
   for (let i = state.particles.length - 1; i >= 0; i -= 1) {
     const particle = state.particles[i];
-    particle.x += particle.vx * frameScale;
-    particle.y += particle.vy * frameScale;
-    const dragScale = Math.pow(particle.drag, frameScale);
-    particle.vx *= dragScale;
-    particle.vy *= dragScale;
+    particle.x += particle.vx;
+    particle.y += particle.vy;
+    particle.vx *= particle.drag;
+    particle.vy *= particle.drag;
     particle.life -= dtSeconds;
     if (particle.life <= 0) {
       state.particles.splice(i, 1);
@@ -852,7 +851,7 @@ function pruneAsteroids() {
   state.asteroids = state.asteroids.filter((asteroid) => asteroid.alive);
 }
 
-function applyCameraEffects(frameScale = 1) {
+function applyCameraEffects() {
   if (state.shake <= 0.01) {
     state.shake = 0;
     state.shakeX = 0;
@@ -861,7 +860,7 @@ function applyCameraEffects(frameScale = 1) {
   }
   state.shakeX = random(-state.shake, state.shake);
   state.shakeY = random(-state.shake, state.shake);
-  state.shake *= Math.pow(0.86, frameScale);
+  state.shake *= 0.86;
 }
 
 function drawFlash() {
@@ -881,29 +880,39 @@ function updateStatusText() {
 }
 
 function drawFrame(now) {
-  const frameMs = clamp(now - state.previousFrame, 6, 67);
-  const dtSeconds = frameMs / 1000;
-  const frameScale = frameMs / (1000 / 60);
+  const frameMs = clamp(now - state.previousFrame, 0, 100);
+  const fixedStepMs = 1000 / 120;
   state.previousFrame = now;
+  state.accumulatorMs += frameMs;
 
-  if (!state.booting) {
-    if (state.keys.has("Space")) shoot(now);
-    updateShip(frameScale);
-    updateAsteroids(frameScale);
-    updateBullets(now, frameScale);
-    updateParticles(dtSeconds, frameScale);
-    detectBulletImpacts();
-    detectShipImpacts(now);
-    pruneAsteroids();
+  let steps = 0;
+  while (state.accumulatorMs >= fixedStepMs && steps < 5) {
+    if (!state.booting) {
+      if (state.keys.has("Space")) shoot(now);
+      updateShip();
+      updateAsteroids();
+      updateBullets(now);
+      updateParticles(fixedStepMs / 1000);
+      detectBulletImpacts();
+      detectShipImpacts(now);
+      pruneAsteroids();
+      applyCameraEffects();
+      updateStatusText();
+    }
+    state.accumulatorMs -= fixedStepMs;
+    steps += 1;
+  }
+  if (steps > 0) {
     updateThrustAudio();
-    applyCameraEffects(frameScale);
-    updateStatusText();
+  }
+  if (steps === 5) {
+    state.accumulatorMs = 0;
   }
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.save();
   ctx.translate(state.shakeX, state.shakeY);
-  drawStars(frameScale);
+  drawStars();
   state.asteroids.forEach(drawAsteroid);
   drawParticles();
   drawBullets();
