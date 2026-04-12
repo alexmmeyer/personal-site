@@ -31,7 +31,21 @@ const config = {
   fillerAsteroidCount: 18,
   minAsteroidRadius: 18,
   maxAsteroidRadius: 58,
+  fillerAsteroidMaxRadius: 48,
+  fillerAsteroidMaxSpeed: 1.6,
+  ctaAsteroidMaxRadius: 56,
+  ctaAsteroidMaxSpeed: 1.2,
 };
+
+if (isTouchDevice()) {
+  config.fillerAsteroidCount = 8;
+  config.minAsteroidRadius = 14;
+  config.maxAsteroidRadius = 38;
+  config.fillerAsteroidMaxRadius = 32;
+  config.fillerAsteroidMaxSpeed = 1.0;
+  config.ctaAsteroidMaxRadius = 40;
+  config.ctaAsteroidMaxSpeed = 0.75;
+}
 
 const state = {
   stars: [],
@@ -161,13 +175,13 @@ function spawnInitialAsteroids() {
     const baseX = margin + spreadX * index;
     const baseY = random(margin, canvas.height - margin);
     const angle = random(0, Math.PI * 2);
-    const speed = random(0.5, 1.2);
+    const speed = random(0.5, config.ctaAsteroidMaxSpeed);
 
     state.asteroids.push(
       createAsteroid({
         x: clamp(baseX + random(-70, 70), margin, canvas.width - margin),
         y: baseY,
-        radius: random(40, 56),
+        radius: random(40, config.ctaAsteroidMaxRadius),
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
         isCta: true,
@@ -179,10 +193,10 @@ function spawnInitialAsteroids() {
 
   for (let i = 0; i < config.fillerAsteroidCount; i += 1) {
     const angle = random(0, Math.PI * 2);
-    const speed = random(0.45, 1.6);
+    const speed = random(0.45, config.fillerAsteroidMaxSpeed);
     state.asteroids.push(
       createAsteroid({
-        radius: random(20, 48),
+        radius: random(20, config.fillerAsteroidMaxRadius),
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
       })
@@ -1093,7 +1107,19 @@ function boot() {
   window.addEventListener("pageshow", () => {
     resetTransientGameplayState();
     updateStatusText();
+    if (audio.initialized && audio.ctx.state === "suspended") {
+      audio.ctx.resume();
+    }
   });
+  document.addEventListener("touchstart", () => {
+    if (!audio.initialized || audio.ctx.state !== "suspended") return;
+    const buf = audio.ctx.createBuffer(1, 1, audio.ctx.sampleRate);
+    const src = audio.ctx.createBufferSource();
+    src.buffer = buf;
+    src.connect(audio.ctx.destination);
+    src.start(0);
+    audio.ctx.resume();
+  }, { passive: true });
   window.addEventListener("pagehide", () => {
     resetTransientGameplayState();
     disableCursorHide();
