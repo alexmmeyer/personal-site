@@ -535,11 +535,11 @@ function resetTransientGameplayState() {
 let cursorHideTimeoutId = null;
 
 function hideCursorAfterIdle() {
-  document.body.style.cursor = "none";
+  document.body.classList.add("cursor-hidden");
 }
 
 function onMouseMove() {
-  document.body.style.cursor = "";
+  document.body.classList.remove("cursor-hidden");
   clearTimeout(cursorHideTimeoutId);
   cursorHideTimeoutId = setTimeout(hideCursorAfterIdle, 2000);
 }
@@ -552,7 +552,7 @@ function enableCursorHide() {
 function disableCursorHide() {
   window.removeEventListener("mousemove", onMouseMove);
   clearTimeout(cursorHideTimeoutId);
-  document.body.style.cursor = "";
+  document.body.classList.remove("cursor-hidden");
 }
 
 function finishStartupAndPlay() {
