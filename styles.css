@@ -425,12 +425,25 @@ body:not(.booting) .startup-play.is-visible {
   .startup-tilt-hint {
     display: block;
     font-family: "Press Start 2P", "Courier New", monospace;
-    font-size: clamp(0.55rem, 3vw, 0.72rem);
+    font-size: clamp(0.38rem, 1.6vw, 0.52rem);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: #f2e76f;
-    margin: 0.5rem 0 0;
+    margin: 1.5rem 0 0;
     text-shadow: 0 0 4px rgba(242, 231, 111, 0.35);
+  }
+
+  .startup-title {
+    text-shadow:
+      0 0 3px rgba(149, 255, 128, 0.9),
+      1px 0 0 rgba(145, 255, 130, 0.28),
+      -1px 0 0 rgba(145, 255, 130, 0.16);
+    animation: titleFlickerMobile 0.12s steps(2) infinite;
+  }
+
+  #startup-name.is-visible {
+    animation: nameSlideDown 2.2s linear forwards,
+      titleFlickerMobile 0.12s steps(2) infinite 2.2s;
   }
 
   body.booting .touch-controls {
@@ -474,4 +487,10 @@ body:not(.booting) .startup-play.is-visible {
     background: rgba(140, 255, 100, 0.18);
     box-shadow: 0 0 14px rgba(168, 255, 136, 0.5);
   }
+}
+
+@keyframes titleFlickerMobile {
+  0%, 100% { opacity: 1; }
+  35%       { opacity: 0.85; }
+  70%       { opacity: 0.94; }
 }
