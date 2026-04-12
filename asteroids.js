@@ -414,8 +414,6 @@ function drawAsteroid(asteroid) {
   ctx.save();
   ctx.translate(asteroid.x, asteroid.y);
   ctx.rotate(asteroid.rotation);
-  ctx.strokeStyle = asteroid.isCta ? "rgba(178, 255, 104, 0.96)" : "rgba(134, 255, 164, 0.84)";
-  ctx.lineWidth = asteroid.isCta ? 2.4 : 1.9;
   ctx.beginPath();
   asteroid.roughness.forEach((mod, i) => {
     const angle = (i / asteroid.roughness.length) * Math.PI * 2;
@@ -429,14 +427,22 @@ function drawAsteroid(asteroid) {
     }
   });
   ctx.closePath();
-  ctx.stroke();
 
   if (asteroid.isCta) {
-    ctx.fillStyle = "rgba(221, 255, 171, 0.96)";
-    ctx.font = "700 15px Trebuchet MS, Verdana, sans-serif";
+    ctx.fillStyle = "rgba(178, 255, 104, 0.35)";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(178, 255, 104, 1)";
+    ctx.lineWidth = 2.4;
+    ctx.stroke();
+    ctx.fillStyle = "rgba(0, 0, 0, 0.85)";
+    ctx.font = "700 10px 'Press Start 2P', 'Courier New', monospace";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(asteroid.label, 0, 0, asteroid.radius * 1.6);
+  } else {
+    ctx.strokeStyle = "rgba(134, 255, 164, 0.84)";
+    ctx.lineWidth = 1.9;
+    ctx.stroke();
   }
   ctx.restore();
 }
@@ -526,6 +532,29 @@ function resetTransientGameplayState() {
   }
 }
 
+let cursorHideTimeoutId = null;
+
+function hideCursorAfterIdle() {
+  document.body.style.cursor = "none";
+}
+
+function onMouseMove() {
+  document.body.style.cursor = "";
+  clearTimeout(cursorHideTimeoutId);
+  cursorHideTimeoutId = setTimeout(hideCursorAfterIdle, 2000);
+}
+
+function enableCursorHide() {
+  window.addEventListener("mousemove", onMouseMove);
+  cursorHideTimeoutId = setTimeout(hideCursorAfterIdle, 2000);
+}
+
+function disableCursorHide() {
+  window.removeEventListener("mousemove", onMouseMove);
+  clearTimeout(cursorHideTimeoutId);
+  document.body.style.cursor = "";
+}
+
 function finishStartupAndPlay() {
   if (!state.booting) return;
   if (startupScreenEl) {
@@ -538,6 +567,7 @@ function finishStartupAndPlay() {
     state.startupReady = false;
     updateStatusText();
     initAudio();
+    enableCursorHide();
   }, 520);
 }
 
@@ -977,6 +1007,7 @@ function enterGameDirectly() {
   }
   initAudio();
   updateStatusText();
+  enableCursorHide();
 }
 
 function boot() {
@@ -997,6 +1028,7 @@ function boot() {
   });
   window.addEventListener("pagehide", () => {
     resetTransientGameplayState();
+    disableCursorHide();
   });
   window.addEventListener("resize", () => {
     resizeCanvas();
