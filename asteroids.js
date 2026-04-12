@@ -1085,7 +1085,7 @@ function enterGameDirectly() {
   if (startupScreenEl) {
     startupScreenEl.style.display = "none";
   }
-  initAudio();
+  if (!isTouchDevice()) initAudio();
   updateStatusText();
   if (!isTouchDevice()) enableCursorHide();
   requestMotionPermission();
