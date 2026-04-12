@@ -151,8 +151,8 @@ body::before {
 }
 
 #startup-name.is-visible {
-  animation: nameSlideDown 2.4s cubic-bezier(0.18, 0.82, 0.15, 1) forwards,
-    titleFlicker 0.12s steps(2) infinite 2.4s;
+  animation: nameSlideDown 1.5s cubic-bezier(0.18, 0.82, 0.15, 1) forwards,
+    titleFlicker 0.12s steps(2) infinite 1.5s;
 }
 
 #startup-controls {
@@ -160,26 +160,44 @@ body::before {
 }
 
 #startup-controls.is-visible {
-  animation: controlsSlideUp 2s cubic-bezier(0.18, 0.82, 0.15, 1) 2.6s forwards;
+  animation: controlsSlideUp 0.95s cubic-bezier(0.18, 0.82, 0.15, 1) 1.15s
+    forwards;
 }
 
 .startup-controls-list {
   list-style: none;
   margin: 0.2rem auto 0;
   padding: 0;
-  max-width: 560px;
-  width: min(92vw, 560px);
+  width: min(94vw, 42rem);
   display: grid;
-  grid-template-columns: repeat(2, minmax(160px, 1fr));
-  gap: 0.62rem 1rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: clamp(0.65rem, 1.6vw, 1rem);
+  row-gap: 0.62rem;
+  align-items: baseline;
   font-family: "Press Start 2P", "Courier New", monospace;
   font-size: clamp(0.36rem, 0.95vw, 0.52rem);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
-.startup-controls-list span {
-  color: #deff89;
+.startup-controls-list li {
+  display: contents;
+}
+
+.startup-key {
+  color: #f2e76f;
+  text-align: right;
+  justify-self: end;
+  padding-right: 0.08em;
+  text-shadow: 0 0 4px rgba(242, 231, 111, 0.35);
+}
+
+.startup-action {
+  color: #56ff8a;
+  text-align: left;
+  justify-self: start;
+  padding-left: 0.08em;
+  text-shadow: 0 0 4px rgba(86, 255, 138, 0.35);
 }
 
 .startup-subtitle {
@@ -211,7 +229,7 @@ body::before {
 }
 
 body.booting .startup-play.is-visible {
-  animation: playFadeIn 1.3s ease 4.6s forwards;
+  animation: playFadeIn 0.85s ease 2.05s forwards;
   pointer-events: auto;
 }
 
@@ -325,7 +343,7 @@ body:not(.booting) .startup-play.is-visible {
     opacity: 0;
     transform: translateY(110vh);
   }
-  72% {
+  48% {
     opacity: 1;
     transform: translateY(-3px);
   }

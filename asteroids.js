@@ -566,7 +566,7 @@ function startStartupSequence() {
     }
     state.startupReady = true;
     setStatusMessage("Press Play to start");
-  }, 4600);
+  }, 3000);
 }
 
 function bounceShipOffAsteroid(asteroid) {
