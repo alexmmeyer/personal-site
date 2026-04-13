@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <title>My Work | Alex Meyer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Monoton&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./my-work.css?v=9" />
+  </head>
+  <body>
+    <div class="bg-wrapper" aria-hidden="true">
+      <div class="bg-image"></div>
+      <div class="bg-overlay"></div>
+    </div>
+
+    <div class="page-layout">
+      <!-- Left sidebar navigation -->
+      <nav class="sidebar" aria-label="Work categories">
+        <a class="home-link" href="./index.html">← Home</a>
+
+        <ul class="primary-nav" role="list">
+          <li class="primary-nav__item" data-category="digital">
+            <button class="primary-nav__btn" aria-expanded="false" aria-controls="subnav-digital">
+              Digital
+            </button>
+            <ul class="secondary-nav" id="subnav-digital" role="list" aria-hidden="true">
+              <li>
+                <button class="secondary-nav__btn" data-project="powderscout">
+                  PowderScout
+                </button>
+              </li>
+              <li>
+                <button class="secondary-nav__btn" data-project="openwaterinsights">
+                  Open Water Insights
+                </button>
+              </li>
+            </ul>
+          </li>
+
+          <li class="primary-nav__item" data-category="physical">
+            <button class="primary-nav__btn" aria-expanded="false" aria-controls="subnav-physical">
+              Physical
+            </button>
+            <ul class="secondary-nav" id="subnav-physical" role="list" aria-hidden="true">
+              <li>
+                <button class="secondary-nav__btn" data-project="timewarptable">
+                  Timewarp Table
+                </button>
+              </li>
+              <li>
+                <button class="secondary-nav__btn" data-project="coppertable">
+                  Copper Table
+                </button>
+              </li>
+              <li>
+                <button class="secondary-nav__btn" data-project="santas">
+                  Santas
+                </button>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Main content area -->
+      <main class="content" id="content-area">
+        <!-- Default / empty state -->
+        <div class="content-panel" id="panel-default">
+          <p class="content-hint">Select a project to learn more.</p>
+        </div>
+
+        <!-- Digital: PowderScout -->
+        <div class="content-panel" id="panel-powderscout" hidden>
+          <h2 class="content-title">PowderScout</h2>
+          <p class="content-description">
+            A consumer web application that helps powder-chasing skiers and snowboarders chase
+            storms. The app ranks destinations using a scoring algorithm optimized for
+            <strong>fresh snow, affordability, and feasibility</strong>, presenting an actionable
+            recommendation table.
+          </p>
+          <a class="content-link" href="https://powderscout.com" target="_blank" rel="noopener">
+            powderscout.com ↗
+          </a>
+          <div class="content-meta">
+            <h3 class="content-meta__heading">Stack</h3>
+            <ul class="content-meta__list">
+              <li><span class="meta-label">Framework</span> Next.js 14 (App Router)</li>
+              <li><span class="meta-label">Language</span> TypeScript</li>
+              <li><span class="meta-label">Database</span> PostgreSQL + Drizzle ORM</li>
+              <li><span class="meta-label">Auth</span> Clerk</li>
+              <li><span class="meta-label">Styling</span> Tailwind CSS</li>
+              <li>
+                <span class="meta-label">APIs</span> Open-Meteo, Expedia, Google Places, Google
+                Routes
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Digital: Open Water Insights -->
+        <div class="content-panel" id="panel-openwaterinsights" hidden>
+          <h2 class="content-title">Open Water Insights</h2>
+          <p class="content-description">
+            A data visualization tool built for athletes, coaches, and fans in professional open
+            water swimming. Created to help people put performances into context, understand how
+            outcomes affect rankings, and compare athletes against each other.
+          </p>
+          <a
+            class="content-link"
+            href="https://www.openwaterinsights.com"
+            target="_blank"
+            rel="noopener"
+          >
+            openwaterinsights.com ↗
+          </a>
+          <div class="content-meta">
+            <h3 class="content-meta__heading">Stack</h3>
+            <ul class="content-meta__list">
+              <li><span class="meta-label">Language</span> Python</li>
+              <li><span class="meta-label">Libraries</span> Plotly, Dash, NetworkX</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Physical: Timewarp Table -->
+        <div class="content-panel" id="panel-timewarptable" hidden>
+          <h2 class="content-title">Timewarp Table</h2>
+          <div class="content-meta">
+            <h3 class="content-meta__heading">Materials</h3>
+            <ul class="content-meta__list">
+              <li>Foam board</li>
+              <li>Steel rod</li>
+              <li>Cement</li>
+              <li>Felt</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Physical: Copper Table -->
+        <div class="content-panel" id="panel-coppertable" hidden>
+          <h2 class="content-title">Copper Table</h2>
+          <div class="content-meta">
+            <h3 class="content-meta__heading">Materials</h3>
+            <ul class="content-meta__list">
+              <li>MDF</li>
+              <li>Copper sheet</li>
+              <li>Acrylic</li>
+              <li>Pre-fabricated steel base</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Physical: Santas -->
+        <div class="content-panel" id="panel-santas" hidden>
+          <h2 class="content-title">Santas</h2>
+          <div class="content-meta">
+            <h3 class="content-meta__heading">Materials</h3>
+            <ul class="content-meta__list">
+              <li>Crayola ModelMagic</li>
+              <li>Toothpicks</li>
+              <li>Beads</li>
+              <li>Acrylic</li>
+              <li>Twine, etc.</li>
+            </ul>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="./my-work.js"></script>
+  </body>
+</html>

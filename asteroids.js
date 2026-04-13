@@ -12,8 +12,7 @@ const isTouchDevice = () =>
   window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
 const CTA_SECTIONS = [
-  { id: "projects", label: "Projects", href: "./projects.html" },
-  { id: "art", label: "Art", href: "./art.html" },
+  { id: "my-work", label: "My Work", href: "./my-work.html" },
   { id: "swimming", label: "Swimming", href: "./swimming.html" },
   { id: "food", label: "Food", href: "./food.html" },
   { id: "about-me", label: "About me", href: "./about-me.html" },
