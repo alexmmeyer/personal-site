@@ -9,7 +9,7 @@
 
 :root {
   --sidebar-w: 360px;
-  --nav-primary-size: clamp(1.9rem, 3.6vw, 2.6rem);
+  --nav-primary-size: clamp(2.4rem, 4.5vw, 3.4rem);
   --nav-secondary-size: clamp(0.95rem, 1.5vw, 1.15rem);
   --text: rgba(255, 255, 255, 0.88);
   --text-dim: rgba(255, 255, 255, 0.45);
@@ -50,14 +50,14 @@ body {
   background-image: url("./my_work_assets/IMG_3598.jpg");
   background-size: cover;
   background-position: center;
-  filter: blur(5px);
+  filter: blur(2px);
 }
 
 /* Dark overlay on top of the blurred image */
 .bg-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.50);
+  background: rgba(0, 0, 0, 0.80);
 }
 
 /* ─── Page layout ──────────────────────────────────────────── */
@@ -122,6 +122,11 @@ body {
 }
 
 /* ─── Secondary nav ─────────────────────────────────────────── */
+@keyframes nav-drop-in {
+  0%   { opacity: 0; transform: translateY(-28px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 .secondary-nav {
   list-style: none;
   display: flex;
@@ -129,17 +134,24 @@ body {
   gap: 0.1rem;
   overflow: hidden;
   max-height: 0;
-  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.25s ease,
-              margin-top 0.25s ease;
-  opacity: 0;
+  transition: max-height 0.4s ease, margin-top 0.25s ease;
   margin-top: 0;
 }
 
 .primary-nav__item.is-open .secondary-nav {
   max-height: 320px;
-  opacity: 1;
   margin-top: 0.55rem;
+}
+
+/* Items hidden by default; JS adds .is-visible with staggered delays */
+.secondary-nav li {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.secondary-nav li.is-visible {
+  /* spring cubic-bezier overshoots past rest position, creating the bounce */
+  animation: nav-drop-in 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .secondary-nav__btn {

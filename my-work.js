@@ -9,13 +9,26 @@
     });
   }
 
+  function animateItemsIn(sub) {
+    const items = sub.querySelectorAll("li");
+    items.forEach((li, i) => {
+      li.classList.remove("is-visible");
+      // Force reflow so removing the class takes effect before re-adding
+      void li.offsetWidth;
+      setTimeout(() => li.classList.add("is-visible"), i * 120);
+    });
+  }
+
   function closeAllCategories() {
     document.querySelectorAll(".primary-nav__item").forEach((item) => {
       item.classList.remove("is-open");
       const btn = item.querySelector(".primary-nav__btn");
       if (btn) btn.setAttribute("aria-expanded", "false");
       const sub = item.querySelector(".secondary-nav");
-      if (sub) sub.setAttribute("aria-hidden", "true");
+      if (sub) {
+        sub.setAttribute("aria-hidden", "true");
+        sub.querySelectorAll("li").forEach((li) => li.classList.remove("is-visible"));
+      }
     });
   }
 
@@ -30,7 +43,10 @@
         item.classList.add("is-open");
         btn.setAttribute("aria-expanded", "true");
         const sub = item.querySelector(".secondary-nav");
-        if (sub) sub.setAttribute("aria-hidden", "false");
+        if (sub) {
+          sub.setAttribute("aria-hidden", "false");
+          animateItemsIn(sub);
+        }
       }
 
       // If closing, return to default panel; if opening with no project yet, show default
