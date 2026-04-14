@@ -92,6 +92,20 @@ body {
   color: var(--accent);
 }
 
+/* ─── Page label ───────────────────────────────────────────── */
+.page-label {
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  align-self: stretch;
+}
+
 /* ─── Primary nav (Digital / Physical) ─────────────────────── */
 .primary-nav {
   list-style: none;
@@ -122,9 +136,19 @@ body {
 }
 
 /* ─── Secondary nav ─────────────────────────────────────────── */
+/* --fall-from is set per-item by JS to the exact pixel distance from the
+   item's resting position back up to the primary nav button */
 @keyframes nav-drop-in {
-  0%   { opacity: 0; transform: translateY(-28px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0%   { transform: translateY(var(--fall-from, -60px)); }
+  70%  { transform: translateY(7px); }
+  84%  { transform: translateY(-4px); }
+  93%  { transform: translateY(2px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes nav-fade-in {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 .secondary-nav {
@@ -151,7 +175,10 @@ body {
 
 .secondary-nav li.is-visible {
   /* spring cubic-bezier overshoots past rest position, creating the bounce */
-  animation: nav-drop-in 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation:
+    nav-fade-in 0.08s ease-out forwards,
+    /* deceleration curve: launches fast, brakes hard before the keyframe bounces kick in */
+    nav-drop-in 0.9s cubic-bezier(0.2, 0, 0.55, 1) forwards;
 }
 
 .secondary-nav__btn {
