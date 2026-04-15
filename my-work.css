@@ -9,7 +9,7 @@
 
 :root {
   --sidebar-w: 360px;
-  --nav-primary-size: clamp(2.4rem, 4.5vw, 3.4rem);
+  --nav-primary-size: clamp(1.9rem, 3.6vw, 2.6rem);
   --nav-secondary-size: clamp(0.95rem, 1.5vw, 1.15rem);
   --text: rgba(255, 255, 255, 0.88);
   --text-dim: rgba(255, 255, 255, 0.45);
@@ -136,19 +136,9 @@ body {
 }
 
 /* ─── Secondary nav ─────────────────────────────────────────── */
-/* --fall-from is set per-item by JS to the exact pixel distance from the
-   item's resting position back up to the primary nav button */
 @keyframes nav-drop-in {
-  0%   { transform: translateY(var(--fall-from, -60px)); }
-  70%  { transform: translateY(7px); }
-  84%  { transform: translateY(-4px); }
-  93%  { transform: translateY(2px); }
-  100% { transform: translateY(0); }
-}
-
-@keyframes nav-fade-in {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
+  0%   { opacity: 0; transform: translateY(-28px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 .secondary-nav {
@@ -167,18 +157,13 @@ body {
   margin-top: 0.55rem;
 }
 
-/* Items hidden by default; JS adds .is-visible with staggered delays */
 .secondary-nav li {
   opacity: 0;
   will-change: transform, opacity;
 }
 
 .secondary-nav li.is-visible {
-  /* spring cubic-bezier overshoots past rest position, creating the bounce */
-  animation:
-    nav-fade-in 0.08s ease-out forwards,
-    /* deceleration curve: launches fast, brakes hard before the keyframe bounces kick in */
-    nav-drop-in 0.9s cubic-bezier(0.2, 0, 0.55, 1) forwards;
+  animation: nav-drop-in 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .secondary-nav__btn {

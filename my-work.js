@@ -9,36 +9,13 @@
     });
   }
 
-  function animateItemsIn(sub, btn) {
+  function animateItemsIn(sub) {
     const items = sub.querySelectorAll("li");
-
-    // Reset animation state
-    items.forEach((li) => {
+    items.forEach((li, i) => {
       li.classList.remove("is-visible");
-      li.style.removeProperty("--fall-from");
-    });
-
-    const btnRect = btn.getBoundingClientRect();
-
-    // Double rAF: first frame kicks off the max-height transition so items
-    // have layout positions; second frame gives stable getBoundingClientRect.
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        items.forEach((li) => {
-          const liRect = li.getBoundingClientRect();
-          // Negative value = how far up from rest position to the btn top
-          const dist = liRect.top - btnRect.top;
-          li.style.setProperty("--fall-from", `${-dist}px`);
-        });
-
-        // Last item fires first
-        items.forEach((li, i) => {
-          setTimeout(
-            () => li.classList.add("is-visible"),
-            (items.length - 1 - i) * 120
-          );
-        });
-      });
+      // Force reflow so removing the class takes effect before re-adding.
+      void li.offsetWidth;
+      setTimeout(() => li.classList.add("is-visible"), i * 120);
     });
   }
 
@@ -68,7 +45,7 @@
         const sub = item.querySelector(".secondary-nav");
         if (sub) {
           sub.setAttribute("aria-hidden", "false");
-          animateItemsIn(sub, btn);
+          animateItemsIn(sub);
         }
       }
 
