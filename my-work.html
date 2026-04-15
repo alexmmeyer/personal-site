@@ -12,7 +12,7 @@
       href="https://fonts.googleapis.com/css2?family=Monoton&family=Inter:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./my-work.css?v=26" />
+    <link rel="stylesheet" href="./my-work.css?v=27" />
   </head>
   <body>
     <div class="bg-wrapper" aria-hidden="true">
@@ -80,25 +80,102 @@
         <div class="content-panel" id="panel-powderscout" hidden>
           <h2 class="content-title">PowderScout</h2>
           <p class="content-description">
-            A consumer web application that helps powder-chasing skiers and snowboarders chase
-            storms. The app ranks destinations using a scoring algorithm optimized for
-            <strong>fresh snow, affordability, and feasibility</strong>, presenting an actionable
-            recommendation table.
+            PowderScout is a storm-chasing trip engine that helps skiers and snowboarders find the
+            best powder for their budget. Enter your dates, home location, and ski passes, and
+            PowderScout ranks destinations based on fresh snow forecasts, travel costs, and lift
+            ticket prices.
           </p>
           <a class="content-link" href="https://powderscout.com" target="_blank" rel="noopener">
             powderscout.com ↗
           </a>
           <div class="content-meta">
-            <h3 class="content-meta__heading">Stack</h3>
+            <h3 class="content-meta__heading">How It Works</h3>
             <ul class="content-meta__list">
-              <li><span class="meta-label">Framework</span> Next.js 14 (App Router)</li>
-              <li><span class="meta-label">Language</span> TypeScript</li>
-              <li><span class="meta-label">Database</span> PostgreSQL + Drizzle ORM</li>
-              <li><span class="meta-label">Auth</span> Clerk</li>
-              <li><span class="meta-label">Styling</span> Tailwind CSS</li>
               <li>
-                <span class="meta-label">APIs</span> Open-Meteo, Expedia, Google Places, Google
-                Routes
+                1. <strong>Enter your trip details</strong>: Dates, origin location, skiing mode,
+                and ski passes
+              </li>
+              <li>
+                2. <strong>Ranking algorithm</strong>: Evaluates resorts based on
+                <strong>fresh snow</strong> (hourly forecast data with a custom snow utility
+                curve), <strong>affordability</strong> (travel costs plus lift ticket prices), and
+                <strong>feasibility</strong> (drive vs fly decision based on distance)
+              </li>
+              <li>
+                3. <strong>Results</strong>: Ranked table of destinations with snowfall, costs,
+                and travel times
+              </li>
+            </ul>
+          </div>
+          <div class="content-meta">
+            <h3 class="content-meta__heading">Key Features</h3>
+            <ul class="content-meta__list content-meta__list--bulleted">
+              <li>
+                <strong>Forecast-driven recommendations</strong>: Uses real-time weather forecasts
+                to predict snowfall
+              </li>
+              <li>
+                <strong>Multi-pass support</strong>: Accounts for Ikon, Epic, and custom ski
+                passes in cost calculations
+              </li>
+              <li>
+                <strong>Smart travel modeling</strong>: Automatically determines drive vs flight
+                trips and estimates costs
+              </li>
+              <li>
+                <strong>Shareable results</strong>: Generate links to share recommendations with
+                others
+              </li>
+              <li>
+                <strong>Powder alerts (Paid)</strong>: Create customized alerts for your ideal
+                snow conditions and receive daily email notifications when matching resorts are
+                found
+              </li>
+              <li>
+                <strong>Custom passes (Paid)</strong>: Define your own ski pass configurations
+                with specific resorts, usable days, and blackout dates
+              </li>
+              <li>
+                <strong>Community roadmap</strong>: Vote on features and suggest improvements
+                (Beta or Paid users)
+              </li>
+            </ul>
+          </div>
+          <div class="content-meta">
+            <h3 class="content-meta__heading">Pricing</h3>
+            <ul class="content-meta__list content-meta__list--labeled">
+              <li>
+                <span class="meta-label">Basic</span>
+                <span class="meta-value">Free - Unlimited searches, save preferences, expand top 3 results</span>
+              </li>
+              <li>
+                <span class="meta-label">Pro</span>
+                <span class="meta-value">
+                  $25/year - Unlimited result expansions, powder alerts, custom passes, roadmap voting
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div class="content-meta">
+            <h3 class="content-meta__heading">Tech Stack</h3>
+            <ul class="content-meta__list content-meta__list--labeled">
+              <li>
+                <span class="meta-label">Frontend</span>
+                <span class="meta-value">Next.js 14 (App Router), TypeScript, Tailwind CSS</span>
+              </li>
+              <li>
+                <span class="meta-label">Backend</span>
+                <span class="meta-value">Next.js API routes, PostgreSQL, Drizzle ORM</span>
+              </li>
+              <li>
+                <span class="meta-label">Auth</span>
+                <span class="meta-value">Clerk</span>
+              </li>
+              <li>
+                <span class="meta-label">APIs</span>
+                <span class="meta-value">
+                  Weather forecasts (Meteoblue/Tomorrow.io), Flight pricing (Amadeus), Google Places/Routes
+                </span>
               </li>
             </ul>
           </div>
@@ -122,9 +199,15 @@
           </a>
           <div class="content-meta">
             <h3 class="content-meta__heading">Stack</h3>
-            <ul class="content-meta__list">
-              <li><span class="meta-label">Language</span> Python</li>
-              <li><span class="meta-label">Libraries</span> Plotly, Dash, NetworkX</li>
+            <ul class="content-meta__list content-meta__list--labeled">
+              <li>
+                <span class="meta-label">Language</span>
+                <span class="meta-value">Python</span>
+              </li>
+              <li>
+                <span class="meta-label">Libraries</span>
+                <span class="meta-value">Plotly, Dash, NetworkX</span>
+              </li>
             </ul>
           </div>
         </div>
