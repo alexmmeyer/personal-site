@@ -66,11 +66,60 @@
 - Squeeze 4 lemons into that shit and mix it up
 
 ### chicken tortilla soup
+
+- Cut fifteen or so tomatillos in half and place them under a broiler until charred on top
+- Dice one white onion, And a mix of green peppers. I usually do two to three poblanos, a jalapeno, a serrano, and an Anaheim. Choose peppers based on how spicy you like it.
+- Saute the peppers and onions with a handful of coarsely chopped garlic in a big pot.
+- Once caramelized, add three quarts of chicken stock, a healthy amount of ground cumin, and 2 cans of white beans (drained/rinsed)
+- Liquefy the tomatillos in a blender and add it to the pot, Along with three chicken breasts, and simmer for 60 to 90 minutes until the chicken is tender and shreds apart.
+- When the chicken is ready, take them out and put them in a side bowl.
+- Thinly chop some hearty greens such as kale or chard and add them to the pot, then shred the chicken and add it back
+- Squeeze four limes into the pot.
+- Serve with tortilla chips, avocado, and cilantro
+
 ### hash browns
+
+- pre-heat a small pan
+- shred a small/medium sized russet potato into a bowl
+- rinse and strain until water is clear
+- squeeze all the water out
+- add a sprinkling of shredded sweet potato
+- add salt, onion powder, garlic powder, thyme, cracked fennel seed
+- add a few swirls of oil and mix it up
+- add a big knob of butter to the hot pan and melt it with some more oil
+- add the potato mixture in an even layer and press it down
+- weight the potato down with a chef's press
+- turn down the heat so it lightly sizzles
+- flip when one side is golden brown
+- sizzle the other side until crispy (less time)
+
+
 ### pork chops
 ### al pastor
 ### mango hot sauce
+
+- chop 2 golden mangos, some habanero pepeprs, scotch bonnet peppers
+- put a well-cleaned 24oz mason jar on a scale and zero it
+- add mangos, peppers, and several whole cloves of garlic to the jar and note the weight
+- add 2% by mass of natural non-iodized sea salt
+- get a fermentation lid (lets gas escape), put it on and shake the hell out of the jar
+- open jar, add a glass fermentation weight on top and pack everything down hard
+- wait 5-7 days
+- dump the jar contents (not the glass weight) into a blender, add a small pour of apple cider vinegar, and blend until smooth
+- bottle and keep refrigerated
+
 ### tomatillo hot sauce
+
+- chop a dozen or so tomatillos, a poblano pepper, and 2-3 serrano peppers
+- put a well-cleaned 24oz mason jar on a scale and zero it
+- add tomatillos, peppers, and several whole cloves of garlic to the jar and note the weight
+- add 2% by mass of natural non-iodized sea salt
+- get a fermentation lid (lets gas escape), put it on and shake the hell out of the jar
+- open jar, add a glass fermentation weight on top and pack everything down hard
+- wait 5-7 days
+- dump the jar contents (not the glass weight) and a handful of fresh cilantro into a blender, squeeze in 2-3 limes, and blend until smooth
+- bottle and keep refrigerated
+
 ### goat cheese in jar
 ### cheesecake
 ### carrot cake
